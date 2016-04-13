@@ -45,7 +45,8 @@ var PATHS = {
 	],
 	testTypings: [
 		'node_modules/angular2/typings/**/*.d.ts',
-		'dist/*.d.ts'
+		'dist/*.d.ts',
+		'typings/**/*.d.ts'
 	],
 };
 

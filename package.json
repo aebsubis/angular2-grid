@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "angular2": "^2.0.0-beta.09",
+    "core-js": "^2.2.2",
     "del": "^1.2.1",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.35.0",
