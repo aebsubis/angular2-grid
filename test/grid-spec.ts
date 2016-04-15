@@ -3,11 +3,12 @@ import { NgGrid, NgGridItem, NgGridPlaceholder } from '../dist/NgGrid';
 
 export function main() {
 	describe("NgGrid Directive", () => {
+        
 		it("should initialise element styles and config ngOnInit", () => {
 			spyOn(NgGrid.prototype, "setConfig");
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle', 'setElementClass']);
-			
-			var ngGrid = new NgGrid(null, null, renderSpy, null);
+			var ngEl: any = { nativeElement: {}};
+			var ngGrid = new NgGrid(null, ngEl, renderSpy, null);
 			
 			ngGrid.ngOnInit();
 			
@@ -87,11 +88,12 @@ export function main() {
 		
 		it("should fix collisions with other items", ()=> {
 			var renderSpy = jasmine.createSpyObj("Renderer", ["setElementStyle", "setElementClass"]);
-			var ngGrid = new NgGrid(null, null, renderSpy, null);
-			var item1 = new NgGridItem(null, renderSpy, ngGrid);
-			var item2 = new NgGridItem(null, renderSpy, ngGrid);
-			var item3 = new NgGridItem(null, renderSpy, ngGrid);
-			var item4 = new NgGridItem(null, renderSpy, ngGrid);
+			var ngEl: any = { nativeElement: {}};
+			var ngGrid = new NgGrid(null, ngEl, renderSpy, null);
+			var item1 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			var item2 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			var item3 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			var item4 = new NgGridItem(ngEl, renderSpy, ngGrid);
 			
 			item1.config = {col: 1, row: 1, sizex: 1, sizey: 1};
 			item2.config = {col: 2, row: 1, sizex: 1, sizey: 3};
@@ -102,19 +104,20 @@ export function main() {
 			expect((<any>item1)._row).toBe(1);
 			expect((<any>item2)._col).toBe(2);
 			expect((<any>item2)._row).toBe(1);
-			expect((<any>item3)._col).toBe(3);
-			expect((<any>item3)._row).toBe(2);
+			expect((<any>item3)._col).toBe(2);
+			expect((<any>item3)._row).toBe(4);
 			expect((<any>item4)._col).toBe(1);
 			expect((<any>item4)._row).toBe(3);
 		});
 		
 		it("should fix cascade items up", ()=> {
 			var renderSpy = jasmine.createSpyObj("Renderer", ["setElementStyle", "setElementClass"]);
-			var ngGrid = new NgGrid(null, null, renderSpy, null);
-			var item1 = new NgGridItem(null, renderSpy, ngGrid);
-			var item2 = new NgGridItem(null, renderSpy, ngGrid);
-			var item3 = new NgGridItem(null, renderSpy, ngGrid);
-			var item4 = new NgGridItem(null, renderSpy, ngGrid);
+			var ngEl: any = { nativeElement: {}};
+			var ngGrid = new NgGrid(null, ngEl, renderSpy, null);
+			var item1 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			var item2 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			var item3 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			var item4 = new NgGridItem(ngEl, renderSpy, ngGrid);
 			
 			item1.config = {col: 1, row: 1, sizex: 4, sizey: 1};
 			item2.config = {col: 2, row: 3, sizex: 1, sizey: 3};
