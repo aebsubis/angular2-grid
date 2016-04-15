@@ -5,29 +5,29 @@ export function main() {
 		it("should generate a ngGrid placeholder", () => {
 			var ngGridPlaceholder: NgGridPlaceholder = new NgGridPlaceholder(null, null, null);
 		});
-
+        
 		it("should set the element class on init", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementClass', 'setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
 			var ngGrid: any = {
 				autoStyle: false
 			};
 			var ngGridPlaceholder: NgGridPlaceholder = new NgGridPlaceholder(ngEl, renderSpy, ngGrid);
 			ngGridPlaceholder.ngOnInit();
-			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl, 'grid-placeholder', true);
+			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl.nativeElement, 'grid-placeholder', true);
 			expect(renderSpy.setElementStyle).not.toHaveBeenCalled();
 		});
-
+        
 		it("should set the element style on init if autoStyle is enabled", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementClass', 'setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
 			var ngGrid: any = {
 				autoStyle: true
 			};
 			var ngGridPlaceholder: NgGridPlaceholder = new NgGridPlaceholder(ngEl, renderSpy, ngGrid);
 			ngGridPlaceholder.ngOnInit();
-			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl, 'grid-placeholder', true);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl,'position', 'absolute');
+			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl.nativeElement, 'grid-placeholder', true);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement,'position', 'absolute');
 		});
 
 		it("should set the size", () => {
@@ -51,64 +51,64 @@ export function main() {
 			expect((<any>ngGridPlaceholder)._row).toBe(newRow);
 			expect((<any>ngGridPlaceholder)._recalculatePosition).toHaveBeenCalled();
 		});
-
+        
 		it("should set the position according to the cascade type", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
 			var ngGrid: any = {};
 			var ngGridPlaceholder: NgGridPlaceholder = new NgGridPlaceholder(ngEl, renderSpy, ngGrid);
 			var newX = 31;
 			var newY = 27;
 
 			(<any>ngGridPlaceholder)._setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 
 			ngGrid.cascade = 'up';
 			(<any>ngGridPlaceholder)._setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 
 			ngGrid.cascade = 'left';
 			(<any>ngGridPlaceholder)._setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 			
 			ngGrid.cascade = 'right';
 			(<any>ngGridPlaceholder)._setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 
 			ngGrid.cascade = 'down';
 			(<any>ngGridPlaceholder)._setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 		});
-
+        
 		it("should set the dimensions", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
 			var ngGridPlaceholder: NgGridPlaceholder = new NgGridPlaceholder(ngEl, renderSpy, null);
 			var newWidth = 31;
 			var newHeight = 27;
 			(<any>ngGridPlaceholder)._setDimensions(newWidth, newHeight);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'width', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'height', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'width', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'height', "27px");
 		});
 
 		it("should recalculate the position", () => {
