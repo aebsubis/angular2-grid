@@ -5,37 +5,43 @@ export function main() {
 		it("should generate a ngGrid item", () => {
 			var ngGridItem: NgGridItem = new NgGridItem(null, null, null);
 		});
-
+        
 		it("should set the element class on init", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementClass', 'setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
+			var addItemSpy = jasmine.createSpy('addItemSpy');
 			var ngGrid: any = {
-				autoStyle: false
+				autoStyle: false,
+				addItem: addItemSpy
 			};
 			var ngGridItem: NgGridItem = new NgGridItem(ngEl, renderSpy, ngGrid);
 			spyOn(ngGridItem, '_recalculateDimensions');
 			spyOn(ngGridItem, '_recalculatePosition');
 			ngGridItem.ngOnInit();
-			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl, 'grid-item', true);
+			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl.nativeElement, 'grid-item', true);
 			expect(renderSpy.setElementStyle).not.toHaveBeenCalled();
 			expect((<any>ngGridItem)._recalculateDimensions).toHaveBeenCalled();
 			expect((<any>ngGridItem)._recalculatePosition).toHaveBeenCalled();
+			expect(addItemSpy).toHaveBeenCalled();
 		});
-
+        
 		it("should set the element style on init if autoStyle is enabled", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementClass', 'setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
+			var addItemSpy = jasmine.createSpy('addItemSpy');
 			var ngGrid: any = {
-				autoStyle: true
+				autoStyle: true,
+				addItem: addItemSpy
 			};
 			var ngGridItem: NgGridItem = new NgGridItem(ngEl, renderSpy, ngGrid);
 			spyOn(ngGridItem, '_recalculateDimensions');
 			spyOn(ngGridItem, '_recalculatePosition');
 			ngGridItem.ngOnInit();
-			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl, 'grid-item', true);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'position', 'absolute');
+			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl.nativeElement, 'grid-item', true);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'position', 'absolute');
 			expect((<any>ngGridItem)._recalculateDimensions).toHaveBeenCalled();
 			expect((<any>ngGridItem)._recalculatePosition).toHaveBeenCalled();
+			expect(addItemSpy).toHaveBeenCalled();
 		});
 
 		it("should drag", () => {
@@ -139,10 +145,10 @@ export function main() {
 			target.parentElement.querySelector.and.returnValue({});
 			expect(ngGridItem.canResize(e)).toBe(null);
 		});
-
+        
 		it("should update the cursor", () => {
 			var e: any = {};
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle']);
 			var ngGrid: any = {
 				autoStyle: false,
@@ -169,12 +175,12 @@ export function main() {
 			expect(ngGridItem.canDrag).not.toHaveBeenCalled();
 			expect(ngGridItem.canResize).not.toHaveBeenCalled();
 			expect((<any>ngGridItem)._getMousePosition).not.toHaveBeenCalled();
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'cursor', 'default');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'cursor', 'default');
 			(<any>ngGridItem.canDrag).calls.reset();
 			(<any>ngGridItem.canResize).calls.reset();
 			(<any>ngGridItem)._getMousePosition.calls.reset();
 			renderSpy.setElementStyle.calls.reset();
-
+			
 			(<any>ngGridItem)._resizeHandle = true;
 			ngGrid.resizeEnable = true;
 			(<any>ngGridItem.canResize).and.returnValue(true);
@@ -182,7 +188,7 @@ export function main() {
 			expect(ngGridItem.canDrag).not.toHaveBeenCalled();
 			expect(ngGridItem.canResize).toHaveBeenCalled();
 			expect((<any>ngGridItem)._getMousePosition).not.toHaveBeenCalled();
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'cursor', 'nwse-resize');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'cursor', 'nwse-resize');
 			(<any>ngGridItem.canDrag).calls.reset();
 			(<any>ngGridItem.canResize).calls.reset();
 			(<any>ngGridItem)._getMousePosition.calls.reset();
@@ -198,7 +204,7 @@ export function main() {
 			expect(ngGridItem.canDrag).not.toHaveBeenCalled();
 			expect(ngGridItem.canResize).not.toHaveBeenCalled();
 			expect((<any>ngGridItem)._getMousePosition).toHaveBeenCalled();
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'cursor', 'default');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'cursor', 'default');
 			(<any>ngGridItem.canDrag).calls.reset();
 			(<any>ngGridItem.canResize).calls.reset();
 			(<any>ngGridItem)._getMousePosition.calls.reset();
@@ -214,7 +220,7 @@ export function main() {
 			expect(ngGridItem.canDrag).not.toHaveBeenCalled();
 			expect(ngGridItem.canResize).not.toHaveBeenCalled();
 			expect((<any>ngGridItem)._getMousePosition).toHaveBeenCalled();
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'cursor', 'ns-resize');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'cursor', 'ns-resize');
 			(<any>ngGridItem.canDrag).calls.reset();
 			(<any>ngGridItem.canResize).calls.reset();
 			(<any>ngGridItem)._getMousePosition.calls.reset();
@@ -230,7 +236,7 @@ export function main() {
 			expect(ngGridItem.canDrag).not.toHaveBeenCalled();
 			expect(ngGridItem.canResize).not.toHaveBeenCalled();
 			expect((<any>ngGridItem)._getMousePosition).toHaveBeenCalled();
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'cursor', 'ew-resize');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'cursor', 'ew-resize');
 			(<any>ngGridItem.canDrag).calls.reset();
 			(<any>ngGridItem.canResize).calls.reset();
 			(<any>ngGridItem)._getMousePosition.calls.reset();
@@ -246,7 +252,7 @@ export function main() {
 			expect(ngGridItem.canDrag).not.toHaveBeenCalled();
 			expect(ngGridItem.canResize).not.toHaveBeenCalled();
 			expect((<any>ngGridItem)._getMousePosition).toHaveBeenCalled();
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'cursor', 'nwse-resize');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'cursor', 'nwse-resize');
 			(<any>ngGridItem.canDrag).calls.reset();
 			(<any>ngGridItem.canResize).calls.reset();
 			(<any>ngGridItem)._getMousePosition.calls.reset();
@@ -260,7 +266,7 @@ export function main() {
 			expect(ngGridItem.canDrag).toHaveBeenCalled();
 			expect(ngGridItem.canResize).not.toHaveBeenCalled();
 			expect((<any>ngGridItem)._getMousePosition).not.toHaveBeenCalled();
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'cursor', 'move');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'cursor', 'move');
 			(<any>ngGridItem.canDrag).calls.reset();
 			(<any>ngGridItem.canResize).calls.reset();
 			(<any>ngGridItem)._getMousePosition.calls.reset();
@@ -398,64 +404,64 @@ export function main() {
 			expect((<any>ngGridItem)._row).toBe(newRow);
 			expect((<any>ngGridItem)._recalculatePosition).toHaveBeenCalled();
 		});
-
+        
 		it("should set the position according to the cascade type", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
 			var ngGrid: any = {};
 			var ngGridItem: NgGridItem = new NgGridItem(ngEl, renderSpy, ngGrid);
 			var newX = 31;
 			var newY = 27;
 
 			(<any>ngGridItem).setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 
 			ngGrid.cascade = 'up';
 			(<any>ngGridItem).setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 
 			ngGrid.cascade = 'left';
 			(<any>ngGridItem).setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 
 			ngGrid.cascade = 'right';
 			(<any>ngGridItem).setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 
 			ngGrid.cascade = 'down';
 			(<any>ngGridItem).setPosition(newX, newY);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'left', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'bottom', "27px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'right', null);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'top', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'left', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'bottom', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'right', null);
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'top', null);
 			(<any>renderSpy.setElementStyle).calls.reset();
 		});
-
+        
 		it("should set the dimensions", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle']);
-			var ngEl: any = {};
+			var ngEl: any = { nativeElement: {}};
 			var ngGridItem: NgGridItem = new NgGridItem(ngEl, renderSpy, null);
 			var newWidth = 31;
 			var newHeight = 27;
 			(<any>ngGridItem).setDimensions(newWidth, newHeight);
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'width', "31px");
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl, 'height', "27px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'width', "31px");
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'height', "27px");
 		});
 
 		it("should recalculate the position", () => {
@@ -516,7 +522,7 @@ export function main() {
 			expect((<any>ngGridItem)._recalculatePosition).toHaveBeenCalled();
 			expect((<any>ngGridItem)._recalculateDimensions).toHaveBeenCalled();
 		});
-
+        
 		it("should add moving class and styles on startMoving", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle', 'setElementClass']);
 			var styleSpy = jasmine.createSpyObj('styleSpy', ['getPropertyValue']);
@@ -525,25 +531,25 @@ export function main() {
 			(<any>window).getComputedStyle = jasmine.createSpy("getComputedStyle").and.returnValue(styleSpy);
 
 			var ngGrid: any = { 'autoStyle': false };
-			var elem: any = { 'nativeElement': {} };
+			var ngEl: any = { nativeElement: {}};
 
-			var ngGridItem: NgGridItem = new NgGridItem(elem, renderSpy, ngGrid);
+			var ngGridItem: NgGridItem = new NgGridItem(ngEl, renderSpy, ngGrid);
 			ngGridItem.startMoving();
 
-			expect(window.getComputedStyle).toHaveBeenCalledWith(elem.nativeElement);
-			expect(renderSpy.setElementClass).toHaveBeenCalledWith(elem, 'moving', true);
+			expect(window.getComputedStyle).toHaveBeenCalledWith(ngEl.nativeElement);
+			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl.nativeElement, 'moving', true);
 			expect(renderSpy.setElementStyle).not.toHaveBeenCalled();
 			expect(styleSpy.getPropertyValue).not.toHaveBeenCalled();
 
 			ngGrid.autoStyle = true;
 			ngGridItem.startMoving();
 
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(elem, 'z-index', '101');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'z-index', '101');
 			expect(styleSpy.getPropertyValue).toHaveBeenCalledWith('z-index');
 
 			(<any>window).getComputedStyle = oldGetCompStyle;
 		});
-
+        
 		it("should remove moving class and styles on stopMoving", () => {
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle', 'setElementClass']);
 			var styleSpy = jasmine.createSpyObj('styleSpy', ['getPropertyValue']);
@@ -552,20 +558,20 @@ export function main() {
 			(<any>window).getComputedStyle = jasmine.createSpy("getComputedStyle").and.returnValue(styleSpy);
 
 			var ngGrid: any = { 'autoStyle': false };
-			var elem: any = { 'nativeElement': {} };
+			var ngEl: any = { nativeElement: {}};
 
-			var ngGridItem: NgGridItem = new NgGridItem(elem, renderSpy, ngGrid);
+			var ngGridItem: NgGridItem = new NgGridItem(ngEl, renderSpy, ngGrid);
 			ngGridItem.stopMoving();
 
-			expect(window.getComputedStyle).toHaveBeenCalledWith(elem.nativeElement);
-			expect(renderSpy.setElementClass).toHaveBeenCalledWith(elem, 'moving', false);
+			expect(window.getComputedStyle).toHaveBeenCalledWith(ngEl.nativeElement);
+			expect(renderSpy.setElementClass).toHaveBeenCalledWith(ngEl.nativeElement, 'moving', false);
 			expect(renderSpy.setElementStyle).not.toHaveBeenCalled();
 			expect(styleSpy.getPropertyValue).not.toHaveBeenCalled();
 
 			ngGrid.autoStyle = true;
 			ngGridItem.stopMoving();
 
-			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(elem, 'z-index', '99');
+			expect(renderSpy.setElementStyle).toHaveBeenCalledWith(ngEl.nativeElement, 'z-index', '99');
 			expect(styleSpy.getPropertyValue).toHaveBeenCalledWith('z-index');
 
 			(<any>window).getComputedStyle = oldGetCompStyle;
