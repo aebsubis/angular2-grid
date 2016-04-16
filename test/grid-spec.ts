@@ -241,5 +241,12 @@ export function main() {
 			expect(cascadeGridSpy).not.toHaveBeenCalledWith();
 			expect(updateSizeSpy).not.toHaveBeenCalledWith();
 		});
+		
+		it("should trigger cascade" , () {
+			const ngGrid = new NgGrid(null, null, null, null);
+			const cascadeGridSpy = spyOn(ngGrid, '_cascadeGrid');
+			ngGrid.triggerCascade();
+			expect(cascadeGridSpy).toHaveBeenCalled();
+		});
 	});
 }
