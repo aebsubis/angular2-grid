@@ -279,11 +279,11 @@ export class NgGrid implements OnInit, DoCheck, OnDestroy {
 	}
 
 	public getItemPosition(index: number): { col: number, row: number } {
-		return this._items[index].getGridPosition();
+		return this._items[index] ? this._items[index].getGridPosition() : null;
 	}
 
 	public getItemSize(index: number): { x: number, y: number } {
-		return this._items[index].getSize();
+		return this._items[index] ? this._items[index].getSize() : null;
 	}
 
 	public ngDoCheck(): boolean {
