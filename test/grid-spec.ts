@@ -200,5 +200,46 @@ export function main() {
 			expect((<any>item4)._col).toBe(1);
 			expect((<any>item4)._row).toBe(3);
 		});
+		
+		it("should remove an item", () => {
+			const renderSpy = jasmine.createSpyObj("Renderer", ["setElementStyle", "setElementClass"]);
+			const ngEl: any = { nativeElement: {}};
+			const ngGrid = new NgGrid(null, ngEl, renderSpy, null);
+			const removeFromGridSpy = spyOn(ngGrid, '_removeFromGrid');
+			const cascadeGridSpy = spyOn(ngGrid, '_cascadeGrid');
+			const updateSizeSpy = spyOn(ngGrid, '_updateSize');
+			const item1 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			const item2 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			const item3 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			
+			(<any>ngGrid)._items = [item1, item2, item3];
+			ngGrid.removeItem(item2);
+			
+			expect(removeFromGridSpy).toHaveBeenCalledWith(item2);
+			expect((<any>ngGrid)._items).toEqual([item1, item3]);
+			expect(cascadeGridSpy).toHaveBeenCalledWith();
+			expect(updateSizeSpy).toHaveBeenCalledWith();
+		});
+		
+		it("should not update the grid after removing an item if it has already been destroyed", () => {
+			const renderSpy = jasmine.createSpyObj("Renderer", ["setElementStyle", "setElementClass"]);
+			const ngEl: any = { nativeElement: {}};
+			const ngGrid = new NgGrid(null, ngEl, renderSpy, null);
+			(<any>ngGrid)._destroyed = true;
+			const removeFromGridSpy = spyOn(ngGrid, '_removeFromGrid');
+			const cascadeGridSpy = spyOn(ngGrid, '_cascadeGrid');
+			const updateSizeSpy = spyOn(ngGrid, '_updateSize');
+			const item1 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			const item2 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			const item3 = new NgGridItem(ngEl, renderSpy, ngGrid);
+			
+			(<any>ngGrid)._items = [item1, item2, item3];
+			ngGrid.removeItem(item2);
+			
+			expect(removeFromGridSpy).toHaveBeenCalledWith(item2);
+			expect((<any>ngGrid)._items).toEqual([item1, item3]);
+			expect(cascadeGridSpy).not.toHaveBeenCalledWith();
+			expect(updateSizeSpy).not.toHaveBeenCalledWith();
+		});
 	});
 }
