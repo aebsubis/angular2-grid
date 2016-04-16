@@ -4,6 +4,19 @@ import { NgGrid, NgGridItem, NgGridPlaceholder } from '../dist/NgGrid';
 export function main() {
 	describe("NgGrid Directive", () => {
         
+		it("should set the config", () => {
+			var differsSpy = jasmine.createSpyObj('differSpy', ['find']);
+			var keyValueDifferFactory = jasmine.createSpyObj('keyValueDifferFactorySpy', ['create']);
+			differsSpy.find.and.returnValue(keyValueDifferFactory)
+			var ngGrid = new NgGrid(differsSpy, null, null, null);
+			var setConfigSpy = spyOn(ngGrid, 'setConfig');
+			var config = {};
+			ngGrid.config = config;
+			expect(differsSpy.find).toHaveBeenCalled();
+			expect(keyValueDifferFactory.create).toHaveBeenCalled();
+			expect(setConfigSpy).toHaveBeenCalled();
+		});
+		
 		it("should initialise element styles and config ngOnInit", () => {
 			spyOn(NgGrid.prototype, "setConfig");
 			var renderSpy = jasmine.createSpyObj('renderSpy', ['setElementStyle', 'setElementClass']);
