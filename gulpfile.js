@@ -6,12 +6,13 @@ var rename = require('gulp-rename');
 var symlink = require('gulp-symlink');
 var sourcemaps = require('gulp-sourcemaps');
 var runSequence = require('run-sequence');
+var replace = require("gulp-replace");
 var merge = require('merge2');
 var KarmaServer = require('karma').Server;
 
 var tsProject = typescript.createProject({
 	"target": "ES5",
-    "module": "umd",
+    "module": "system",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -60,7 +61,9 @@ gulp.task('ts', function () {
 		.pipe(typescript(tsProject));
 
 	return merge([
-		tsResult.js.pipe(sourcemaps.write()).pipe(gulp.dest('dist')).pipe(uglify()).pipe(rename({extname: '.min.js'})).pipe(gulp.dest('dist')),
+		tsResult.js.pipe(replace("var __decorate =", "/* istanbul ignore next */\r\nvar __decorate ="))
+		.pipe(replace("var __metadata =", "/* istanbul ignore next */\r\nvar __metadata ="))
+		.pipe(sourcemaps.write()).pipe(gulp.dest('dist')).pipe(uglify()).pipe(rename({extname: '.min.js'})).pipe(gulp.dest('dist')),
 		tsResult.dts.pipe(gulp.dest('src')).pipe(gulp.dest('dist'))
 	]);
 });

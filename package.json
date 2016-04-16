@@ -46,6 +46,7 @@
     "es6-shim": "^0.35.0",
     "gulp": "^3.9.0",
     "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
     "gulp-sourcemaps": "^1.5.2",
     "gulp-symlink": "^2.1.4",
     "gulp-typescript": "^2.9.2",
