@@ -41,6 +41,40 @@ export function main() {
 			expect(ngGrid.setConfig).toHaveBeenCalled();
 		});
 		
+		it("should set the destroyed flat on destroy", () => {
+			const ngGrid = new NgGrid(null, null, null, null);
+			ngGrid.ngOnDestroy();
+			expect((<any>ngGrid)._destroyed).toBeTruthy();
+		});
+		
+		it("should get the item position", () => {
+			const ngGrid = new NgGrid(null, null, null, null);
+			const itemSpy = jasmine.createSpyObj('itemSpy', ['getGridPosition']);
+			const itemPosition = {col: 1, row: 1};
+			itemSpy.getGridPosition.and.returnValue(itemPosition);
+			(<any>ngGrid)._items = [itemSpy];
+			expect(ngGrid.getItemPosition(0)).toBe(itemPosition);
+		});
+		
+		it("should return null when getting position if the item does not exist", () => {
+			const ngGrid = new NgGrid(null, null, null, null);
+			expect(ngGrid.getItemPosition(0)).toBeNull();
+		});
+		
+		it("should get the item size", () => {
+			const ngGrid = new NgGrid(null, null, null, null);
+			const itemSpy = jasmine.createSpyObj('itemSpy', ['getSize']);
+			const itemSize = {x: 1, y: 1};
+			itemSpy.getSize.and.returnValue(itemSize);
+			(<any>ngGrid)._items = [itemSpy];
+			expect(ngGrid.getItemSize(0)).toBe(itemSize);
+		});
+		
+		it("should return null when getting size if the item does not exist", () => {
+			const ngGrid = new NgGrid(null, null, null, null);
+			expect(ngGrid.getItemSize(0)).toBeNull();
+		});
+		
 		it("should set dragEnable to the relevant value on enable/disable drag", () => {
 			var ngGrid = new NgGrid(null, null, null, null);
 			
